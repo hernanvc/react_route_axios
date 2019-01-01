@@ -11,6 +11,8 @@ import {Row, Container, Col} from 'reactstrap';
 import {requestData} from '../services/request.service';
 import { Upload, Icon, Modal } from 'antd';
 
+import { API_URL } from '../../env'
+
 var NumberFormat = require('react-number-format');
 
 class IndexForm extends Component{
@@ -108,7 +110,7 @@ class IndexForm extends Component{
 
 
     handleChange(e) {
-        console.log(e)
+        console.log(e.value)
         this.setState({
             [e.name]: e.value
         })
@@ -127,7 +129,17 @@ class IndexForm extends Component{
         });
       };
     
-    handleChange = ({ fileList }) => this.setState({ fileList });
+    //handleChange = ({ fileList }) => this.setState({ fileList });
+
+
+    submitForm(e){
+        console.log("ya tu sabes mami ");
+        console.log('====================================')
+        console.log(this.state.data.solicitud.metros_cuadrados)
+        console.log(this.state)
+        console.log('====================================')
+
+    }
     
 
     async validateForm(e){
@@ -396,7 +408,7 @@ class IndexForm extends Component{
                                 <h6>Subida de imagenes</h6>
                                 <hr/>
                             </Col>
-                            <Col md="12" style={{ marginBottom: "100px" }}>
+                            {/* <Col md="12" style={{ marginBottom: "100px" }}>
                                 <div className="clearfix">
                                     <Upload
                                     action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -411,10 +423,10 @@ class IndexForm extends Component{
                                         <img alt="example" style={{ width: '100%' }} src={previewImage} />
                                     </Modal>
                                 </div>
-                            </Col>
+                            </Col> */}
                             <Col md="12">
                                 <div className="form-group text-center">
-                                    <button type="button" className="btn btn-primary main-btn form-btn first-btn" onClick={ () => this.changeForm(1) } >Continuar</button>
+                                    <button type="button" className="btn btn-primary main-btn form-btn first-btn" onClick={(e) => this.submitForm(e) } >Continuar</button>
                                 </div>
                             </Col>
                         </Row>
