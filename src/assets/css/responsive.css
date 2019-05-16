@@ -1,0 +1,207 @@
+@media(max-width: 1366px){
+
+}
+
+@media(max-width: 1199px) {
+   
+}
+
+@media(max-width: 1024px) {
+    h3{
+       font-size: 1.6em;
+    }
+    .first-section .common-box__sub {
+        padding: 0px 26px 68px;
+    }
+    .third-section .common-box__sub {
+        padding: 0 13px;
+    }
+    .cont-image{
+        width: 55%;
+    }
+}
+@media (max-width: 991px){
+    .nav-top .nav-top-right{
+        width: 100%;
+    }
+    .navbar-light .navbar-nav .nav-link{
+        font-size: 10px;
+        padding: 9px 9px;
+    }
+    .navbar-light .navbar-brand img{
+        height: 30px;
+    }
+    .nav-btn{
+        width: 100px;
+    }
+}
+@media (max-width: 823px){
+    footer ul li.title {
+        font-size: 18px;
+        white-space: inherit;
+    }
+    .footer-menu {
+        margin-left: 32px;
+    }
+    
+}
+
+@media (max-width: 800px){
+    .hidden-nav{
+        display: none;
+    }
+    .navbar-nav{
+        position: relative;
+        width: 100%;
+    }
+    .navbar-nav li{
+        text-align: center;
+        width: 100%;
+    }
+    h3 {
+        font-size: 1.3em;
+    }
+    .footer-menu {
+        margin-left: 5px;
+    }
+    
+    
+    
+    .first-section .common-box__sub,
+    .second-section .common-box__sub,
+    .third-section .common-box__sub{
+        padding: 0;
+    }
+    #second-section .card-img {
+        padding: 0 0 75px;
+    }
+    .third-section .common-box__first{
+        padding: 30px 18px 65px;
+    }
+    .third-section .common-box__first h6{
+        margin-bottom: 30px !important;
+    }
+}
+
+@media (max-width: 767px){    
+    footer{
+        padding: 60px 0px 0px;
+    }
+    footer ul {
+        float: none;
+        text-align: center;
+        padding: 0;
+    } 
+    .footer-menu {
+        margin-left: 0;
+    }
+    .cont-image {
+        width: 100%;
+        position: relative;
+        top: 0px;
+        padding: 15px;
+    }
+    .btn:not(:disabled):not(.disabled) {
+        cursor: pointer;
+        display: block;
+        width: 100%;
+    }
+    .third-section {
+        padding: 40px 0;
+    }
+    .third-section .common-box__first{
+       margin-bottom: 40px;
+    }
+    .content-nav{
+        padding: 20px;
+    }
+    .hidden-desktop{
+        display: block
+    }
+    .steps, .steps .toleft, .steps .toright, .toleft, .toleft p, .toright, .toright p{
+        text-align: center!important;
+    }
+    .layout-section.steps img{
+        width: 50%;
+    }
+    .layout-section .second-title img, .layout-section .toright .second-title img{
+        width: 100%;
+        left: 0px;
+        right: 0px;
+    }
+    .hidden-mobile{
+        display: none
+    }
+    .secondary-btn{
+        width: 100%;
+    }
+    .second-title, .third-title{
+        padding-bottom: 10px;
+    }
+    .layout-section .toright .second-title img{
+        top: 90px;
+    }
+    .layout-section .main-title{
+        padding-top: 60px
+    }
+    .layout-section .main-title img{
+        display: none;
+    }
+    .layout-section .main-title h4{
+        margin: auto
+    }
+    .waves-container, .waves-container .svg-container, .waves-container svg{
+        width: 120%;
+    }
+    .form-section .waves-container{
+        top: -701px
+    }
+}
+@media (max-width: 667px){
+    
+}
+
+@media (max-width: 640px){
+    
+}
+
+@media (max-width: 568px) {
+   
+}
+
+@media (max-width: 450px) {
+    footer ul li.title{
+        padding: 0 10px;
+    }
+    .price-page{
+        padding: 0px
+    }
+    .waves-container{
+        width: 180%;
+        top: -680px;
+    }
+    h3{
+        margin-bottom: 20px;
+    }
+    .price-page .allservices-section .one-services img{
+        top: 50px;
+    }
+    .price-page .allservices-section .one-services{
+        min-height: 150px;
+    }
+    .footer-menu{
+        text-align: center;
+    }
+}
+
+@media (max-width: 375px) {
+    
+}
+
+@media (max-width: 360px) {
+    
+}
+
+@media (max-width: 320px) {
+    
+}

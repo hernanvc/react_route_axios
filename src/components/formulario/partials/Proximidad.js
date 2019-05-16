@@ -1,0 +1,1 @@
+export const Proximidad = ["Inmediato", "Cercano", "Medio", "Lejano", "No aplica"]

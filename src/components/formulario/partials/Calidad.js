@@ -1,0 +1,1 @@
+export const Calidad = ["Muy Bueno", "Bueno", "Regular", "Deficiente", "Malo"]
