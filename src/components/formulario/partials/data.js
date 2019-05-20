@@ -161,7 +161,7 @@ export const Fields = {
             "type": "Calidad"
           },
           {
-            "name": "Coservación",
+            "name": "Conservación",
             "type": "Calidad"
           }]
         },

@@ -11,6 +11,8 @@ import {Row, Container, Col} from 'reactstrap';
 import {requestData} from '../services/request.service';
 import { Upload, Icon, Modal } from 'antd';
 
+import { API_URL } from '../../env'
+
 var NumberFormat = require('react-number-format');
 
 class IndexForm extends Component{
@@ -108,7 +110,7 @@ class IndexForm extends Component{
 
 
     handleChange(e) {
-        console.log(e)
+        console.log(e.value)
         this.setState({
             [e.name]: e.value
         })
@@ -127,7 +129,17 @@ class IndexForm extends Component{
         });
       };
     
-    handleChange = ({ fileList }) => this.setState({ fileList });
+    handleupdate = ({ fileList }) => this.setState({ fileList });
+
+
+    submitForm(e){
+        console.log("ya tu sabes mami ");
+        console.log('====================================')
+        console.log(this.state.data.solicitud.metros_cuadrados)
+        console.log(this.state)
+        console.log('====================================')
+
+    }
     
 
     async validateForm(e){
@@ -403,7 +415,7 @@ class IndexForm extends Component{
                                     listType="picture-card"
                                     fileList={fileList}
                                     onPreview={this.handlePreview}
-                                    onChange={this.handleChange}
+                                    onChange={this.handleupdate}
                                     >
                                     {fileList.length >= 3 ? null : uploadButton}
                                     </Upload>
@@ -414,7 +426,7 @@ class IndexForm extends Component{
                             </Col>
                             <Col md="12">
                                 <div className="form-group text-center">
-                                    <button type="button" className="btn btn-primary main-btn form-btn first-btn" onClick={ () => this.changeForm(1) } >Continuar</button>
+                                    <button type="button" className="btn btn-primary main-btn form-btn first-btn" onClick={(e) => this.submitForm(e) } >Continuar</button>
                                 </div>
                             </Col>
                         </Row>
