@@ -7,7 +7,7 @@ import {Orientacion } from './partials/Orientacion';
 import {Comparacion } from './partials/Comparacion';
 import {Consolidacion } from './partials/Consolidacion';
 import {Fields} from './partials/data';
-import {Row, Container, Col} from 'reactstrap';
+import {Row, Container, Col, Input} from 'reactstrap';
 import {requestData} from '../services/request.service';
 import { Upload, Icon, Modal } from 'antd';
 
@@ -31,18 +31,20 @@ class IndexForm extends Component{
             consolidacion: [],
             second: [],
             third: [],
+            direccion: "",
+            n_depto: "",
+            superficie_total: "",
             data: {'solicitud': {}},
             previewVisible: false,
             previewImage: '',
             fileList: [
-              {
-                uid: '-1',
-                name: 'xxx.png',
-                status: 'done',
-                url: require("../../assets/images/placeholder.png"),
-              },
+                {
+                    uid: '-1',
+                    name: 'xxx.png',
+                    status: 'done',
+                    url: require("../../assets/images/placeholder.png"),
+                },
             ],
-
         };
     }
     handleCancel = () => this.setState({ previewVisible: false });
@@ -57,6 +59,7 @@ class IndexForm extends Component{
             });
             console.log(this.state.data)
         }
+        
         await this.setState({
             exogenos: Fields.formulario.exogenos,
             endogenos: Fields.formulario.endogenos,
@@ -65,9 +68,12 @@ class IndexForm extends Component{
             proximidad: Proximidad,
             orientacion: Orientacion,
             comparacion: Comparacion,
-            consolidacion: Consolidacion
-        })
-        console.log( this.state.data )
+            consolidacion: Consolidacion,
+            direccion: this.state.data.solicitud.direccion,
+            metros_cuadrados: this.state.data.solicitud.metros_cuadrados,
+            departamento: this.state.data.solicitud.n_depto,
+            agendamiento:  id
+        }) 
 
     }
 
@@ -110,7 +116,6 @@ class IndexForm extends Component{
 
 
     handleChange(e) {
-        console.log(e.value)
         this.setState({
             [e.name]: e.value
         })
@@ -132,117 +137,20 @@ class IndexForm extends Component{
     handleupdate = ({ fileList }) => this.setState({ fileList });
 
 
-    submitForm(e){
-        console.log("ya tu sabes mami ");
-        console.log('====================================')
-        console.log(this.state.data.solicitud.metros_cuadrados)
-        console.log(this.state)
-        console.log('====================================')
+    async submitForm(e){
+        e.preventDefault()
+        let number  = this.state.direccion.match(/\d+/)[0] 
+        let calle = this.state.direccion.split(number)[0]
+        let comuna = this.state.direccion.split(",")[1]
+        await this.setState({
+            calle: calle,
+            comuna: comuna
+        })
+        let sendform = await requestData.sendForm("fichas/", this.state)
+        console.log(sendform)
+
 
     }
-    
-
-    async validateForm(e){
-        var valido = true;
-        var error = '';
-        var regExpEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if(this.state.page === 0){
-            if (this.state.email === '') {
-                valido = false;
-                error += "Ingrese su correo. \n"
-            }
-            else{
-                if (!regExpEmail.test(this.state.email)) {
-                    valido = false;
-                    error += 'El correo electrónico debe contener el formato correcto.\n';
-                }
-            }
-            
-        }
-        if(this.state.page === 1){
-            if (this.state.property_type === '') {
-                valido = false;
-                error += "Seleccione el tipo de propiedad. \n"
-            }
-            if (this.state.city === '') {
-                valido = false;
-                error += "Seleccione una comuna. \n"
-            }
-            if (this.state.address === '') {
-                valido = false;
-                error += "Ingrese una dirección. \n"
-            }
-        }
-        if(this.state.page === 2){
-            if (this.state.mts === 0) {
-                valido = false;
-                error += "Ingrese La cantidad de metros cuadrados. \n"
-            }
-            if (this.state.bedroom === 0) {
-                valido = false;
-                error += "Ingrese La cantidad de piezas. \n"
-            }
-        }
-        if(this.state.page === 3){
-            if (this.state.lease_value === 0) {
-                valido = false;
-                error += "Ingrese el valor de arriendo. \n"
-            }
-            if (this.state.price === 0) {
-                valido = false;
-                error += "Ingrese el valor del mercado. \n"
-            }
-            if (this.state.years_old === 0) {
-                valido = false;
-                error += "Ingrese la antigüedad de la propiedad. \n"
-            }
-        }
-        if(this.state.page === 4){
-            if (this.state.name === '') {
-                valido = false;
-                error += "Ingrese su nombre. \n"
-            }
-            if (this.state.last_name === '') {
-                valido = false;
-                error += "Ingrese su apellido. \n"
-            }
-            if (this.state.phone.length < 8) {
-                valido = false;
-                error += "Ingrese su número de teléfono. \n"
-            }
-            else{
-            }
-        }
-        if(!valido ){
-            var array = new Array()
-            array = error.split("\n")
-            array.splice( array.length-1)
-            for(var i = 0; i < array.length; i++){
-                this.setState({
-                    error: array,
-                })
-            }
-            this.handleAlert(error)
-            return false;
-        }
-        else{
-            return true
-        }
-    }
-
-    async changeForm(e){
-        let validar = await this.validateForm()
-        if(validar ){
-            this.setState({
-                page: e 
-            })
-        }
-        else{
-            return
-        }
-        
-    }
-
 
     render(){
         const { previewVisible, previewImage, fileList } = this.state;
@@ -272,81 +180,82 @@ class IndexForm extends Component{
                                 </div>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col md="12">
-                                <div className="common-box__sub animated fadeInRightBig">
-                                    <div className="form-group">
-                                        <label>Dirección</label>
-                                        <input type="text" className="form-control" name="direccion" value={this.state.data.solicitud.direccion} placeholder="Dirección" onChange={ (e) => this.handleChange(e.target) }  />
+                        <form onSubmitCapture={ (e)=> this.submitForm(e) }>
+                            <Row>
+                                <Col md="12">
+                                    <div className="common-box__sub animated fadeInRightBig">
+                                        <div className="form-group">
+                                            <label>Dirección</label>
+                                            <input type="text" className="form-control" disabled={true} name="direccion" value={this.state.direccion} placeholder="Dirección" onChange={ (e) => this.handleChange(e.target) }  />
+                                        </div>
                                     </div>
-                                </div>
-                            </Col>
-                            <Col md="6">
-                                <div className="common-box__sub animated fadeInRightBig">
-                                    <div className="form-group">
-                                        <label> Superficie útil</label>
-                                        <div className="input-group mb-2 mr-sm-2">
-                                        <input type="text" className="form-control" name="superficie_util" placeholder="Superficie útil" onChange={ (e) => this.handleChange(e.target) }  />
-                                            <div className="input-group-prepend">
-                                                <div className="input-group-text">m²</div>
+                                </Col>
+                                <Col md="6">
+                                    <div className="common-box__sub animated fadeInRightBig">
+                                        <div className="form-group">
+                                            <label> Superficie útil</label>
+                                            <div className="input-group mb-2 mr-sm-2">
+                                                <input type="text" name="superficie" placeholder="Superficie" className="form-control" value={ this.state.superficie } required onChange={ (e) => this.handleChange(e.target) }/>
+                                                <div className="input-group-prepend">
+                                                    <div className="input-group-text">m²</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Superficie total</label>
+                                            <div className="input-group mb-2 mr-sm-2"> 
+                                                <input type="text" className="form-control" required name="metros_cuadrados" value={this.state.metros_cuadrados}  placeholder="Superficie total" onChange={ (e) => this.handleChange(e.target) }  />
+                                                <div className="input-group-prepend">
+                                                    <div className="input-group-text">m²</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="form-group">
+                                            <label>Terraza</label>
+                                            <div className="input-group mb-2 mr-sm-2">
+                                                <input type="text" className="form-control" required name="terraza" placeholder="Terraza" value={this.state.terraza} onChange={ (e) => this.handleChange(e.target) }  />
+                                                <div className="input-group-prepend">
+                                                    <div className="input-group-text">m²</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </Col>
+                                <Col md="3">
                                     <div className="form-group">
-                                        <label>Terraza</label>
-                                        <div className="input-group mb-2 mr-sm-2">
-                                            <input type="text" className="form-control" name="terraza" placeholder="Terraza" onChange={ (e) => this.handleChange(e.target) }  />
-                                            <div className="input-group-prepend">
-                                                <div className="input-group-text">m²</div>
-                                            </div>
-                                        </div>
+                                        <label>Piso</label>
+                                        <input type="text" className="form-control"  name="piso" placeholder="Piso" required onChange={ (e) => this.handleChange(e.target) }  />
                                     </div>
                                     <div className="form-group">
-                                        <label>Superficie total</label>
-                                        <div className="input-group mb-2 mr-sm-2">
-                                            <input type="text" className="form-control" name="metros_cuadrados" value={this.state.data.solicitud.metros_cuadrados}  placeholder="Superficie total" onChange={ (e) => this.handleChange(e.target) }  />
-                                            <div className="input-group-prepend">
-                                                <div className="input-group-text">m²</div>
-                                            </div>
-                                        </div>
+                                        <label>Torre</label>
+                                        <input type="text" className="form-control" name="torre" placeholder="Torre"  required onChange={ (e) => this.handleChange(e.target) }  />
                                     </div>
-                                </div>
-                            </Col>
-                            <Col md="3">
-                                <div className="form-group">
-                                    <label>Piso</label>
-                                    <input type="text" className="form-control" name="piso" placeholder="Piso" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                                <div className="form-group">
-                                    <label>Torre</label>
-                                    <input type="text" className="form-control" name="torre" placeholder="Torre" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                                <div className="form-group">
-                                    <label>Departamento</label>
-                                    <input type="text" className="form-control"  name="n_depto" value={this.state.data.solicitud.n_depto} placeholder="Departamento" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                            </Col>
-                            <Col md="3">
-                                <div className="form-group">
-                                    <label>Estacionamiento</label>
-                                    <input type="text" className="form-control" name="estacionamiento_1" placeholder="Estacionamiento" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                                <div className="form-group">
-                                    <label>Estacionamiento</label>
-                                    <input type="text" className="form-control" name="estacionamiento_2" placeholder="Estacionamiento" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                                <div className="form-group">
-                                    <label>Bodega</label>
-                                    <input type="text" className="form-control" name="bodega_1" placeholder="Bodega" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                                <div className="form-group">
-                                    <label>Bodega</label>
-                                    <input type="text" className="form-control" name="bodega_2" placeholder="Bodega" onChange={ (e) => this.handleChange(e.target) }  />
-                                </div>
-                            </Col>
-                        </Row>
-                        
-                        <Row>
+                                    <div className="form-group">
+                                        <label>Departamento</label>
+                                        <input type="text" className="form-control"  name="departamento" required value={this.state.departamento} placeholder="Departamento" onChange={ (e) => this.handleChange(e.target) }  />
+                                    </div>
+                                </Col>
+                                <Col md="3">
+                                    <div className="form-group">
+                                        <label>Estacionamiento</label>
+                                        <input type="text" className="form-control"  name="estacionamiento" required placeholder="Estacionamiento" onChange={ (e) => this.handleChange(e.target) }  />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Estacionamiento</label>
+                                        <input type="text" className="form-control" name="estacionamiento_dos" required placeholder="Estacionamiento" onChange={ (e) => this.handleChange(e.target) }  />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Bodega</label>
+                                        <input type="text" className="form-control" name="bodega" required placeholder="Bodega" onChange={ (e) => this.handleChange(e.target) }  />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Bodega</label>
+                                        <input type="text" className="form-control" name="bodega_dos" required placeholder="Bodega" onChange={ (e) => this.handleChange(e.target) }  />
+                                    </div>
+                                </Col>
+                            </Row>
+                            
+                            <Row>
                             <Col md="6">
                                 <div className="common-box__sub animated fadeInRightBig">
 
@@ -359,8 +268,8 @@ class IndexForm extends Component{
                                                     <label>
                                                         {t.name}
                                                     </label>
-                                                    <select  className="custom-select" name={t.name}  onChange={(e) => this.handleSelect(e, t.name)} >
-                                                        <option  value="0" >-</option>
+                                                    <select  className="custom-select" required name={t.value}  onChange={(e) => this.handleSelect(e, t.value)} >
+                                                        <option  >-</option>
                                                         { t.type === "Comuna" ? this.renderComunas() : null }
                                                         { t.type === "Calidad" ? this.renderCalidad() : null }
                                                         { t.type === "Proximidad" ? this.renderProximidad() : null }
@@ -387,7 +296,7 @@ class IndexForm extends Component{
                                                     <label>
                                                         {t.name}
                                                     </label>
-                                                    <select  className="custom-select" name={t.name}   onChange={(e) => this.handleSelect(e, t.name)} >
+                                                    <Input type="select"  className="from-control" name={t.value} required onChange={(e) => this.handleSelect(e, t.value)} >
                                                         <option  value="0" >-</option>
                                                         { t.type === "Comuna" ? this.renderComunas() : null }
                                                         { t.type === "Calidad" ? this.renderCalidad() : null }
@@ -395,8 +304,8 @@ class IndexForm extends Component{
                                                         { t.type === "Orientacion" ? this.renderOrientacion() : null }
                                                         { t.type === "Comparación" ? this.renderComparacion() : null }
                                                         { t.type === "Consolidación" ? this.renderConsolidacion() : null }
-                                                        
-                                                    </select>
+                                                    
+                                                    </Input>
                                                 </div>
                                             )}
                                         </div>
@@ -426,10 +335,12 @@ class IndexForm extends Component{
                             </Col>
                             <Col md="12">
                                 <div className="form-group text-center">
-                                    <button type="button" className="btn btn-primary main-btn form-btn first-btn" onClick={(e) => this.submitForm(e) } >Continuar</button>
+                                    <button type="submit" className="btn btn-primary main-btn form-btn first-btn"  >Continuar</button>
                                 </div>
                             </Col>
                         </Row>
+                    
+                        </form>
                     </Container>
                 </div>
             </div>

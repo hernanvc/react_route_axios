@@ -7,27 +7,29 @@ export const Fields = {
           "weight": 45,
           "fields": [{
               "name": "Localización",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "localizacion"
             },
-            // {
-            //   "name": "Entorno",
-            //   "type": "Comuna"
-            // },
             {
               "name": "Servicios",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "servicios" 
             },
             {
               "name": "Equipamiento",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "equipamiento"
             },
             {
               "name": "Accesibilidad",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "accesibilidad"
+
             },
             {
               "name": "Conectividad",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "conectividad"
             }
           ]
         },
@@ -36,15 +38,18 @@ export const Fields = {
           "weight": 25,
           "fields": [{
             "name": "Barrio",
-            "type": "Consolidación"
+            "type": "Consolidación",
+            "value": "barrio"
           },
           {
             "name": "PRC",
-            "type": "Consolidación"
+            "type": "Consolidación",
+            "value": "prc"
           },
           {
             "name": "Usos",
-            "type": "Consolidación"
+            "type": "Consolidación",
+            "value": "usos"
           }]
         },
         {
@@ -52,43 +57,53 @@ export const Fields = {
           "weight": 30,
           "fields": [{
             "name": "Metro",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "metro"
           },
           {
             "name": "Supermercado",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "supermercado"
           }, 
           {
             "name": "Colegios",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "colegios"
           },
           {
             "name": "Farmacia",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "farmacias"
           },
           {
             "name": "Comercio menor",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "comercio_menor"
           },
           {
             "name": "Centro comercial",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "centro_comercial"
           },
           {
             "name": "Parque",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "parque"
           },
           {
             "name": "Plaza",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "plaza"
           },
           {
             "name": "Ciclovía",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "ciclovia"
           },
           {
             "name": "Osio",
-            "type": "Proximidad"
+            "type": "Proximidad",
+            "value": "osio"
           },]
         }
   
@@ -98,25 +113,26 @@ export const Fields = {
         {
           "title": "Obra Gruesa",
           "weight": 35,
-          "fields": [{
-              "name": "Localización",
-              "type": "Calidad"
-            },
+          "fields": [
             {
               "name": "Tipología",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "obragruesa_tipologia"
             },
             {
               "name": "Calidad",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "obragruesa_calidad"
             },
             {
               "name": "Conservación",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "obragruesa_conservacion"
             },
             {
               "name": "Antigüedad",
-              "type": "Calidad"
+              "type": "Calidad",
+              "value": "obragruesa_antiguedad"
             },
           ]
         },
@@ -125,15 +141,18 @@ export const Fields = {
           "weight": 35,
           "fields": [{
             "name": "Calidad",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "terminaciones_calidad"
           },
           {
             "name": "Conservación",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "terminaciones_conservacion"
           },
           {
             "name": "Antigüedad",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "terminaciones_antiguedad"
           }]
         },
         {
@@ -141,15 +160,18 @@ export const Fields = {
           "weight": 15,
           "fields": [{
             "name": "Calidad",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "instalaciones_calidad"
           },
           {
             "name": "Conservación",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "instalaciones_conservacion"
           },
           {
             "name": "Antigüedad",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "instalaciones_antiguedad"
           }]
         },
   
@@ -158,11 +180,13 @@ export const Fields = {
           "weight": 5,
           "fields": [{
             "name": "Calidad",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "obras_complementarias_calidad"
           },
           {
             "name": "Conservación",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "obras_complementarias_conservacion"
           }]
         },
         {
@@ -170,15 +194,18 @@ export const Fields = {
           "weight": 3,
           "fields": [{
             "name": "Derechos",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "derechos"
           },
           {
             "name": "Vistas",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "vistas"
           },
           {
             "name": "Equipamiento del conjunto",
-            "type": "Calidad"
+            "type": "Calidad",
+            "value": "equipamiento_del_conjunto"
           }]
         },
         {
@@ -186,11 +213,13 @@ export const Fields = {
           "weight": 7,
           "fields": [{
             "name": "Orientación principal",
-            "type": "Orientacion"
+            "type": "Orientacion",
+            "value": "orientacion_principal"
           },
           {
             "name": "Orientación secundaria",
-            "type": "Orientacion"
+            "type": "Orientacion",
+            "value": "orientacion_secundaria"
           }]
         }
   
