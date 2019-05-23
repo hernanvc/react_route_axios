@@ -10,6 +10,7 @@ import {Fields} from './partials/data';
 import {Row, Container, Col, Input} from 'reactstrap';
 import {requestData} from '../services/request.service';
 import { Upload, Icon, Modal } from 'antd';
+import Swal from 'sweetalert2'
 
 import { API_URL } from '../../env'
 
@@ -38,12 +39,6 @@ class IndexForm extends Component{
             previewVisible: false,
             previewImage: '',
             fileList: [
-                {
-                    uid: '-1',
-                    name: 'xxx.png',
-                    status: 'done',
-                    url: require("../../assets/images/placeholder.png"),
-                },
             ],
         };
     }
@@ -70,13 +65,12 @@ class IndexForm extends Component{
             comparacion: Comparacion,
             consolidacion: Consolidacion,
             direccion: this.state.data.solicitud.direccion,
-            metros_cuadrados: this.state.data.solicitud.metros_cuadrados,
+            superficie_total: this.state.data.solicitud.metros_cuadrados,
             departamento: this.state.data.solicitud.n_depto,
             agendamiento:  id
         }) 
 
     }
-
     renderComunas() {
         if(this.state.data.comuna ){
             return <option  value="0" > {this.state.data.comuna} </option>
@@ -138,6 +132,7 @@ class IndexForm extends Component{
 
 
     async submitForm(e){
+        console.log(this.state)
         e.preventDefault()
         let number  = this.state.direccion.match(/\d+/)[0] 
         let calle = this.state.direccion.split(number)[0]
@@ -146,11 +141,61 @@ class IndexForm extends Component{
             calle: calle,
             comuna: comuna
         })
-        let sendform = await requestData.sendForm("fichas/", this.state)
-        console.log(sendform)
+        let json = {
+            files:this.state.fileList[0].originFileObj,
+            refId: "5ce6f5cfa483a31aff5113e4",
+            path: "/public/upload",
+            ref: "ficha",
+            field: "images"
+        }
+        if(this.state.fileList.length < 1){
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Debes subir al menos una imagen',
+              })
+              return false
+        }
+        let sendform = await requestData.sendForm("fichas/", this.state, "/upload/", json)
+        if (sendform){
+            if(sendform.status === 200){
+                Swal.fire({
+                    type: 'success',
+                    title: '¡Formulario guardado!',
+                    text: 'Has completado toda la información de esta ficha',
+                })
+                this.props.history.push({
+                    pathname: "/lab/eazyroof_react/form/solicitudes",
+                })
+            }
+            else{
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'No hemos podido guardar la información. intentalo más tarde',
+                  })
+            }
+        }
+        
+        // console.log(this.state.fileList)
+        // let form = []
+        // for(var i = 0; i< this.state.fileList.length; i++){
+        //     console.log(this.state.fileList[i])
+        //     form.push(this.state.fileList[i].originFileObj)
+        // }
+        // let json = {
+        //     files:this.state.fileList[0].originFileObj,
+        //     refId: "5ce6f5cfa483a31aff5113e4",
+        //     path: "/public/upload",
+        //     ref: "ficha",
+        //     field: "images"
+        // }
+        // let img = await requestData.submitImg("/upload/", json )
+        // console.log(img)
 
 
     }
+    
 
     render(){
         const { previewVisible, previewImage, fileList } = this.state;
@@ -204,7 +249,7 @@ class IndexForm extends Component{
                                         <div className="form-group">
                                             <label>Superficie total</label>
                                             <div className="input-group mb-2 mr-sm-2"> 
-                                                <input type="text" className="form-control" required name="metros_cuadrados" value={this.state.metros_cuadrados}  placeholder="Superficie total" onChange={ (e) => this.handleChange(e.target) }  />
+                                                <input type="text" className="form-control" required name="superficie_total" value={this.state.superficie_total}  placeholder="Superficie total" onChange={ (e) => this.handleChange(e.target) }  />
                                                 <div className="input-group-prepend">
                                                     <div className="input-group-text">m²</div>
                                                 </div>

@@ -1,6 +1,7 @@
-import { API_URL } from '../../env'
+import { API_URL } from '../../env';
 
 import axios from 'axios'
+const queryString = require('query-string');
 
 class RequestData
 {
@@ -31,7 +32,7 @@ class RequestData
             return false
         })
     }
-    sendForm(url, data){
+    sendForm(url, data, urlImg,params){
         let headers = { 'Content-Type': 'application/x-www-form-urlencoded;  charset=UTF-8' }
         let http = axios.create({ baseURL: API_URL,  headers: headers	})
         let form = new URLSearchParams();
@@ -52,7 +53,7 @@ class RequestData
         form.append("equipamiento_del_conjunto", data.equipamiento_del_conjunto);
         form.append("estacionamiento", data.estacionamiento);
         form.append("estacionamiento_dos", data.estacionamiento_dos);
-        form.append("farmacia", data.farmacia);
+        form.append("farmacias", data.farmacias);
         form.append("instalaciones_antiguedad", data.instalaciones_antiguedad);
         form.append("instalaciones_calidad", data.instalaciones_calidad);
         form.append("instalaciones_conservacion", data.instalaciones_conservacion);
@@ -84,17 +85,78 @@ class RequestData
         form.append("terraza", data.terraza);
         form.append("torre", data.torre);
         form.append("usos", data.usos);
-        form.append("vista", data.vista);
+        form.append("vistas", data.vistas);
         form.append("comuna", data.comuna);
         form.append("calle", data.calle);
-        return http.post(url, form).then(resp =>{
-          return resp
-        }).catch(error => {
-            console.log(error);
-            return false
-        })
-    }
 
+        const headersImg = {'Content-Type': `multipart/form-data; boundary=${params.files._boundary}`};
+
+        let fd= new FormData()
+    
+        fd.append('files', params.files)
+        fd.append('path', params.path)
+        fd.append('ref', params.ref)
+        fd.append('field', params.field)
+
+        const promise1 = http.post(url, form);
+        return promise1.then(function(resp) {
+            let idimg = resp.data._id
+            console.log(resp, idimg)
+            fd.append('refId', idimg)
+            const promise2 = axios.post(`${API_URL}${urlImg}`, fd,  {headers:headersImg})
+            return promise2.then(function(respuesta) {
+                console.log(respuesta)
+                return respuesta
+            }).catch(function(error) {
+                console.log(error);
+                return false    
+            })
+        }).catch(function(error) {
+            console.log(error);
+            return false    
+        });
+    }
+    async sendData(credentials) {
+        let url =  API_URL +'/auth/local';
+        console.log(credentials, url, API_URL)
+        const requestBody = {
+          'identifier': credentials.email,
+          'password': credentials.password,
+        };
+        const options = {
+          method: 'POST',
+          headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: queryString.stringify(requestBody),
+          url,
+        };
+        return axios(options)
+        .then(res=>{
+          localStorage.setItem('token', res.data.jwt)
+          this.isAuthenticated = true
+          localStorage.setItem('user', JSON.stringify(res.data.user) )
+          this.user = res.data.user;
+          return res
+        })
+        .catch(error => {
+          console.log(error);
+          return false })
+    }
+    submitImg(url, params) {
+        const headers = {'Content-Type': `multipart/form-data; boundary=${params.files._boundary}`};
+
+        let fd= new FormData()
+      
+        fd.append('files', params.files)
+        fd.append('path', params.path)
+        fd.append('refId', params.refId)
+        fd.append('ref', params.ref)
+        fd.append('field', params.field)
+      
+        axios.post(`${API_URL}${url}`, fd,  {headers:headers})
+          .then(resp => {
+            console.log(resp)
+          });
+    }
 }
 
 export const requestData = new RequestData();

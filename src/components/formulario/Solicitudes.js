@@ -17,6 +17,10 @@ class Solicitudes extends Component{
     
       async componentDidMount()
       {
+        // let token = localStorage.getItem('token')
+        // if(tok){
+
+        // }
         let fetch = await requestData.getUsers('agendamientos/')
         if(fetch){
           await this.setState( {
