@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import 'antd/dist/antd.css';
 const { Column, ColumnGroup } = Table;
 
-class Solicitudes extends Component{
+class Finished extends Component{
     constructor(props) {
         super(props);
         this.state = 
@@ -20,19 +20,11 @@ class Solicitudes extends Component{
         let token = localStorage.getItem('token')
         if(token){
             let user =  await JSON.parse(localStorage.getItem("user"));
-            let fetch = await requestData.getUsers('agendamientos/')
+            let fetch = await requestData.getUsers('agendamientos?estado=completado')
             console.log(fetch, user)
             if(fetch){
-                let data = []
-                fetch.data.forEach(element => {
-                    element.user.forEach(item => {
-                        if(item.id === user._id){
-                            data.push(element)
-                        }
-                    });
-                });
                 await this.setState( {
-                    data: data
+                    data: fetch.data
                 });
             }
         }
@@ -50,7 +42,7 @@ class Solicitudes extends Component{
                         <Row>
                             <Col md={{ offset: 3, size: 6 }} lg={{ offset: 4, size: 4 }} sm={{ offset: 2, size: 8 }}>
                                 <img src={require("../../assets/images/logo.png")} className="img-responsive" alt="logo"/>
-                                <h6 className="text-center">FICHA TASADOR</h6>
+                                <h6 className="text-center">FICHAS COMPLETADAS</h6>
                                 <br/>
                                 <br/>
                             </Col>
@@ -88,7 +80,7 @@ class Solicitudes extends Component{
                                     key="action"
                                     render={(text, record) => (
                                         <span>
-                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px"}} href="javascript:;" to={"/lab/eazyroof_react/form/solicitudes/" + record.id}  params={record.id}>Completar solicitud {record.lastName}</Link>
+                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px"}} href="javascript:;" to={"/lab/eazyroof_react/form/complete/detail=" + record.id}  params={record.id}>Ver solicitud {record.lastName}</Link>
                                         </span>
                                     )}
                                     />
@@ -102,4 +94,4 @@ class Solicitudes extends Component{
     }
 
 }
-export default Solicitudes
+export default Finished

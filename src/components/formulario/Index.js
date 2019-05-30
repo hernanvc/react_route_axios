@@ -45,6 +45,7 @@ class IndexForm extends Component{
     handleCancel = () => this.setState({ previewVisible: false });
 
     async componentDidMount(){
+        console.log(this.props.match.params.handle)
         let id = this.props.match.params.handle;
         let fetch = await requestData.getDetail('agendamientos/' + id)
         if(fetch){
@@ -52,7 +53,6 @@ class IndexForm extends Component{
             await this.setState({
                 data
             });
-            console.log(this.state.data)
         }
         
         await this.setState({
@@ -132,7 +132,6 @@ class IndexForm extends Component{
 
 
     async submitForm(e){
-        console.log(this.state)
         e.preventDefault()
         let number  = this.state.direccion.match(/\d+/)[0] 
         let calle = this.state.direccion.split(number)[0]
@@ -141,29 +140,40 @@ class IndexForm extends Component{
             calle: calle,
             comuna: comuna
         })
-        let json = {
-            files:this.state.fileList[0].originFileObj,
-            refId: "5ce6f5cfa483a31aff5113e4",
-            path: "/public/upload",
-            ref: "ficha",
-            field: "images"
-        }
-        if(this.state.fileList.length < 1){
+        if(this.state.fileList.length < 3){
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: 'Debes subir al menos una imagen',
+                text: 'Debes subir al menos 3 imagenes',
               })
               return false
         }
-        let sendform = await requestData.sendForm("fichas/", this.state, "/upload/", json)
+        let sendform = await requestData.sendForm("fichas/", this.state)
         if (sendform){
+            let form = []
+            for(var i = 0; i< this.state.fileList.length; i++){
+                 form.push(this.state.fileList[i].originFileObj)
+            }
+            form.forEach( async function(element) {
+                let json = {
+                    files:element,
+                    refId: "5ce6f5cfa483a31aff5113e4",
+                    path: "/public/upload",
+                    ref: "ficha",
+                    field: "images"
+                }
+                await requestData.submitImg("/upload/", json , sendform.data._id)
+                
+            });
+              
+           
             if(sendform.status === 200){
                 Swal.fire({
                     type: 'success',
                     title: '¡Formulario guardado!',
                     text: 'Has completado toda la información de esta ficha',
                 })
+                let cambio =await requestData.putRandom('agendamientos/' + this.props.match.params.handle)
                 this.props.history.push({
                     pathname: "/lab/eazyroof_react/form/solicitudes",
                 })
@@ -207,7 +217,7 @@ class IndexForm extends Component{
         );
 
         return(
-            <div className="first-section">
+            <div className="first-section" style={{paddingBottom: "65px"}}>
                 <div className="animated fadeInRight">
                     <Container>
                         <Row>
@@ -313,8 +323,8 @@ class IndexForm extends Component{
                                                     <label>
                                                         {t.name}
                                                     </label>
-                                                    <select  className="custom-select" required name={t.value}  onChange={(e) => this.handleSelect(e, t.value)} >
-                                                        <option  >-</option>
+                                                    <select  className="custom-select form-control" required name={t.value}  onChange={(e) => this.handleSelect(e, t.value)} >
+                                                        <option defaultValue value=""  >-</option>
                                                         { t.type === "Comuna" ? this.renderComunas() : null }
                                                         { t.type === "Calidad" ? this.renderCalidad() : null }
                                                         { t.type === "Proximidad" ? this.renderProximidad() : null }
@@ -341,8 +351,8 @@ class IndexForm extends Component{
                                                     <label>
                                                         {t.name}
                                                     </label>
-                                                    <Input type="select"  className="from-control" name={t.value} required onChange={(e) => this.handleSelect(e, t.value)} >
-                                                        <option  value="0" >-</option>
+                                                    <select className="form-control" name={t.value} required onChange={(e) => this.handleSelect(e, t.value)} >
+                                                        <option defaultValue value=""  >-</option>
                                                         { t.type === "Comuna" ? this.renderComunas() : null }
                                                         { t.type === "Calidad" ? this.renderCalidad() : null }
                                                         { t.type === "Proximidad" ? this.renderProximidad() : null }
@@ -350,7 +360,7 @@ class IndexForm extends Component{
                                                         { t.type === "Comparación" ? this.renderComparacion() : null }
                                                         { t.type === "Consolidación" ? this.renderConsolidacion() : null }
                                                     
-                                                    </Input>
+                                                    </select>
                                                 </div>
                                             )}
                                         </div>

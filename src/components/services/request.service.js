@@ -32,7 +32,7 @@ class RequestData
             return false
         })
     }
-    sendForm(url, data, urlImg,params){
+    sendForm(url, data){
         let headers = { 'Content-Type': 'application/x-www-form-urlencoded;  charset=UTF-8' }
         let http = axios.create({ baseURL: API_URL,  headers: headers	})
         let form = new URLSearchParams();
@@ -89,28 +89,8 @@ class RequestData
         form.append("comuna", data.comuna);
         form.append("calle", data.calle);
 
-        const headersImg = {'Content-Type': `multipart/form-data; boundary=${params.files._boundary}`};
-
-        let fd= new FormData()
-    
-        fd.append('files', params.files)
-        fd.append('path', params.path)
-        fd.append('ref', params.ref)
-        fd.append('field', params.field)
-
-        const promise1 = http.post(url, form);
-        return promise1.then(function(resp) {
-            let idimg = resp.data._id
-            console.log(resp, idimg)
-            fd.append('refId', idimg)
-            const promise2 = axios.post(`${API_URL}${urlImg}`, fd,  {headers:headersImg})
-            return promise2.then(function(respuesta) {
-                console.log(respuesta)
-                return respuesta
-            }).catch(function(error) {
-                console.log(error);
-                return false    
-            })
+       return http.post(url, form).then(function(resp) {
+            return resp
         }).catch(function(error) {
             console.log(error);
             return false    
@@ -141,14 +121,14 @@ class RequestData
           console.log(error);
           return false })
     }
-    submitImg(url, params) {
+    submitImg(url, params, id) {
         const headers = {'Content-Type': `multipart/form-data; boundary=${params.files._boundary}`};
 
         let fd= new FormData()
       
         fd.append('files', params.files)
         fd.append('path', params.path)
-        fd.append('refId', params.refId)
+        fd.append('refId', id)
         fd.append('ref', params.ref)
         fd.append('field', params.field)
       
@@ -156,6 +136,19 @@ class RequestData
           .then(resp => {
             console.log(resp)
           });
+    }
+    putRandom(url){
+        const headers = { 'Content-Type': 'application/x-www-form-urlencoded;  charset=UTF-8'};
+
+        let form = new URLSearchParams();
+        form.append("estado", "completado")
+        let http = axios.create({ baseURL: API_URL,  headers: headers	})
+        return http.put(url, form)
+          .then(resp => {
+            console.log(resp)
+        }).catch(error =>{
+          console.log(error)
+        });
     }
 }
 

@@ -1914,6 +1914,15 @@ h4.brown{
 .toleft .sphere{
     float:left;
 }
+.detalle-ficha ul {
+    column-count: 2;
+}
+.detalle-ficha ul li p{
+    font-weight: bold;
+}
+.detalle-ficha ul li p span{
+    font-weight: 500
+}
 /*Footer*/
 
 footer{
