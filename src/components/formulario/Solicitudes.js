@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {Row, Container, Col} from 'reactstrap';
 import {requestData} from '../services/request.service'
-import { Table} from 'antd';
 import { Link } from "react-router-dom";
 import 'antd/dist/antd.css';
+import { Table} from 'antd';
 const { Column, ColumnGroup } = Table;
 
 class Solicitudes extends Component{
@@ -11,7 +11,8 @@ class Solicitudes extends Component{
         super(props);
         this.state = 
         {
-          data: [{ 'solicitud': {} }]
+          data: [{ 'solicitud': {} }],
+          loader: true
         }
       }
     
@@ -21,18 +22,20 @@ class Solicitudes extends Component{
         if(token){
             let user =  await JSON.parse(localStorage.getItem("user"));
             let fetch = await requestData.getUsers('agendamientos/')
-            console.log(fetch, user)
             if(fetch){
                 let data = []
+                console.log(fetch.data, fetch)
                 fetch.data.forEach(element => {
-                    element.user.forEach(item => {
-                        if(item.id === user._id){
+                    console.log(element)
+                    if(element.user){
+                        if(element.user.id === user._id){
                             data.push(element)
                         }
-                    });
+                    }
                 });
                 await this.setState( {
-                    data: data
+                    data: data,
+                    loader: false
                 });
             }
         }
@@ -54,7 +57,13 @@ class Solicitudes extends Component{
                                 <br/>
                                 <br/>
                             </Col>
+                            <Col md={{ size: 3 }} lg={{ size: 4 }} sm={{size: 2 }}>
+                                <Link style={ {display: "block", width: "100%", lineHeight: "40px"} } to="/lab/eazyroof_react/form/complete" className="main-btn">Ver solicitudes completas</Link>
+                                <br/>
+                                <br/>
+                            </Col>
                         </Row>
+                        {this.state.loader ? <h3>Buscando Solicitudes...</h3> :
                         <Row>
                             <Col md={{ size:12 }}>
                                 <Table dataSource={this.state.data} rowKey="id"> 
@@ -89,12 +98,14 @@ class Solicitudes extends Component{
                                     render={(text, record) => (
                                         <span>
                                             <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px"}} href="javascript:;" to={"/lab/eazyroof_react/form/solicitudes/" + record.id}  params={record.id}>Completar solicitud {record.lastName}</Link>
+
+                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px", marginTop: "20px"}} href="javascript:;" to={"/lab/eazyroof_react/form/ficha=" + record.id}  params={record.id}>Ver Ficha {record.lastName}</Link>
                                         </span>
                                     )}
                                     />
                                 </Table>
                             </Col>
-                        </Row>
+                        </Row> }
                     </Container>
                 </div>
             </div>

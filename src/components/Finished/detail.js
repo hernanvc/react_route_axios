@@ -10,9 +10,10 @@ class DetailFinished extends Component{
         super(props);
         this.state = 
         {
-          data: [{ 'solicitud': {} }],
+          data: [{ 'solicitud': {'direccion': ""} }],
           ficha: {images:[]},
           valores:new Array,
+          price: ""
 
         }
       }
@@ -24,7 +25,8 @@ class DetailFinished extends Component{
         if(fetch){
             await this.setState( {
                 data: fetch.data,
-                ficha: fetch.data.ficha
+                ficha: fetch.data.ficha,
+                price: fetch.data.solicitud.precio_referencial
             });
         }
         let obj = this.state.ficha
@@ -45,7 +47,6 @@ class DetailFinished extends Component{
         
     }
     renderImg(){
-        console.log(this.state.ficha.images)
         return this.state.ficha.images.map((item, index)=>{
             return <Col xl="4" lg="4" md="6" sm="6" xs="12" key={index}><img  src={API_URL + item.url} alt={index} /></Col>
         })
@@ -58,6 +59,9 @@ class DetailFinished extends Component{
                     <Row>
                         <Col lg="12">
                             <h3 style={{ margin: '16px 0' }}>Detalles</h3>
+                            <h5>Dirección: <b>{this.state.data.solicitud ? this.state.data.solicitud.direccion : ""}</b></h5>
+                            <h5>Precio referencial: <b>{ this.state.price.replace(/\B(?=(\d{3})+(?!\d))/g, ".")} UF</b></h5>
+                            <br/>
                             <List
                             size="small"
                             header={<div>Valores</div>}

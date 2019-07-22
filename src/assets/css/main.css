@@ -314,6 +314,7 @@ a:hover, a:focus{
     background: #749649;
     transition: .3s;
     -webkit-transition: .3s;
+    padding: 0px 15px;
     /* background: -moz-linear-gradient(left, #316E33 12%, #308d32 54%);
     background: -webkit-linear-gradient(left, #316E33 12%,#308d32 54%); 
     background: linear-gradient(to right, #316E33 12%,#308d32 54%);

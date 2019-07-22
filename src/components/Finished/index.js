@@ -19,6 +19,7 @@ class Finished extends Component{
       {
         let token = localStorage.getItem('token')
         if(token){
+            
             let user =  await JSON.parse(localStorage.getItem("user"));
             let fetch = await requestData.getUsers('agendamientos?estado=completado')
             console.log(fetch, user)
