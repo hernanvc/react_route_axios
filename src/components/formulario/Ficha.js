@@ -50,7 +50,7 @@ class Ficha extends Component{
             console.log(fetch)
             let data = fetch.data[0]
             let datos_referencia = []
-            datos_referencia = data.datos_de_referencia ? data.datos_de_referencia[0] : []
+            datos_referencia = data.datos_de_referencia ? data.datos_de_referencia[data.datos_de_referencia.length - 1] : []
             await this.setState({
                 data,
                 datos_referencia: datos_referencia,
@@ -64,20 +64,78 @@ class Ficha extends Component{
     }
     
     renderProm(){
+        console.log('====================================')
+        console.log(this.state.datos_referencia)
+        console.log('====================================')
         let prom = 0
         let arrayLength = this.state.datos_referencia.length;
+        let count = 0;
+        let precio_metros_depurar = 0;
+        let precio_diefinitivo =  "";
         this.state.datos_referencia.forEach(element => {
+            console.log('====================================')
+            console.log(element)
+            console.log('====================================')
             let precioSinPuntos = element[0].replace("UF", "")
             precioSinPuntos = precioSinPuntos.replace(/\./g, "")
             let PrecioFinal = parseInt(precioSinPuntos)
+            let metro_sin_depurar = element[1].replace("Superficie:", "").replace("m²", "")
+            console.log(metro_sin_depurar);
+            let arrray_metro = metro_sin_depurar.split("/")
             //PrecioFinal = parseInt(PrecioFinal)
-
-            prom = prom + PrecioFinal
+            let metro = 0;
+          
+            if (arrray_metro.length <2){
+                metro = arrray_metro[0].replace(".", "").replace(",", ".")
+                console.log('====================================')
+                console.log(metro)
+                console.log('====================================')
+            }else{
+                console.log(arrray_metro[1]);
+                console.log(arrray_metro[0])
+                let total = parseFloat(Math.round(arrray_metro[1].trim().replace(".", "").replace(",", ".")));
+                let construido = parseFloat(Math.round(arrray_metro[0].trim().replace(".", "").replace(",", ".")));
+                let terrasa = total - construido;
+                let terrasa_monto = terrasa / 2;
+                let metros = construido + terrasa_monto;
+                
+                let metro_propiedad = parseFloat(Math.round(PrecioFinal / metros));
+                precio_metros_depurar = precio_metros_depurar + metro_propiedad
+                count += 1
+                console.log('====================================')
+                console.log(total)
+                console.log('====================================')
+                console.log('====================================')
+                console.log(construido)
+                console.log('====================================')
+                
+            }
+            let factores = [1.2, 1.05, 1, 0.9, 0.8]
+            let pricio_metro_medio = precio_metros_depurar / count;
+            let terrasa_metros = this.state.data.solicitud.terraza/2;
+            let pricio_final = pricio_metro_medio * parseFloat(Math.round(this.state.data.solicitud.metros_cuadrados + terrasa_metros));
+            let pricio_final_d = (pricio_final * factores[this.state.data.solicitud.antiguedad]) * 0.95;
+            console.log('==================precio final==================')
+            console.log(pricio_final)
+            console.log(pricio_final_d)
+            
+            console.log('====================================')
+           // prom = prom + PrecioFinal
+            pricio_final_d = parseInt(pricio_final_d).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            console.log('====================================')
+            precio_diefinitivo = pricio_final_d;
+            console.log(pricio_final_d)
+            return pricio_final_d
 
         });
         let promedio = parseInt(prom / arrayLength)
         promedio = promedio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-        return promedio
+        return precio_diefinitivo
+    }
+
+
+    miportal(){
+
     }
 
     async deleteItem(e) {
