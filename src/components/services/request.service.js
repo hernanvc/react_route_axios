@@ -96,6 +96,16 @@ class RequestData
             return false    
         });
     }
+
+    update(url, params){
+      const headers = {'Content-Type': 'application/json; charset=UTF-8' };
+      const http =  axios.create({ baseURL:API_URL,  headers: headers });
+      return http.put( `${url}`, params ).then( function(response){
+          console.log(response)
+          return response
+        }).catch( error => { console.log(error); return false });      
+    }
+
     async sendData(credentials) {
         let url =  API_URL +'/auth/local';
         console.log(credentials, url, API_URL)

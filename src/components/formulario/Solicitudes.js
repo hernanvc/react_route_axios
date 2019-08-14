@@ -26,7 +26,6 @@ class Solicitudes extends Component{
                 let data = []
                 console.log(fetch.data, fetch)
                 fetch.data.forEach(element => {
-                    console.log(element)
                     if(element.user){
                         if(element.user.id === user._id){
                             data.push(element)
@@ -97,9 +96,9 @@ class Solicitudes extends Component{
                                     key="action"
                                     render={(text, record) => (
                                         <span>
-                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px"}} href="javascript:;" to={"/lab/eazyroof_react/form/solicitudes/" + record.id}  params={record.id}>Completar solicitud {record.lastName}</Link>
+                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px"}} href="javascript:;" to={"/lab/eazyroof_react/form/solicitudes/" + record.id}  params={record.id}>Completar solicitud </Link>
 
-                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px", marginTop: "20px"}} href="javascript:;" to={"/lab/eazyroof_react/form/ficha=" + record.id}  params={record.id}>Ver Ficha {record.lastName}</Link>
+                                            <Link className="main-btn" style={{display: "block", padding: "8px 10px", width: "100%", borderRadius: "6px", marginTop: "20px"}} href="javascript:;" to={"/lab/eazyroof_react/form/ficha=" + record.id}  params={record.id}>Ver Info </Link>
                                         </span>
                                     )}
                                     />

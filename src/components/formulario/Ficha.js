@@ -29,6 +29,7 @@ class Ficha extends Component{
             second: [],
             third: [],
             direccion: "",
+            type: "",
             n_depto: "",
             superficie_total: "",
             data: {'solicitud': {}},
@@ -39,51 +40,34 @@ class Ficha extends Component{
             ],
         };
     }
+
     handleCancel = () => this.setState({ previewVisible: false });
 
     async componentDidMount(){
-        console.log(this.props.match.params.handle)
         let id = this.props.match.params.handle;
-        let fetch = await requestData.getDetail('agendamientos/' + id)
+        let fetch = await requestData.getDetail('agendamientos?id=' +id)
         if(fetch){
-            let data = fetch.data
+            console.log(fetch)
+            let data = fetch.data[0]
             let datos_referencia = []
-            datos_referencia = data.datos_de_referencia ? data.datos_de_referencia : []
-            let final_array = []
-            datos_referencia.forEach(element => {
-                if(element.nombre !== "" && element.precio !== ""){
-                    final_array.push(element)
-                }
-            });
+            datos_referencia = data.datos_de_referencia ? data.datos_de_referencia[0] : []
             await this.setState({
                 data,
-                datos_referencia: final_array
+                datos_referencia: datos_referencia,
+                type: fetch.data[0].solicitud.tipo
             });
         }
-
-        console.log(this.state.datos_referencia)
-        
         await this.setState({
-            exogenos: Fields.formulario.exogenos,
-            endogenos: Fields.formulario.endogenos,
-            comunas: Regiones.regiones[14].comunas,
-            calidad: Calidad,
-            proximidad: Proximidad,
-            orientacion: Orientacion,
-            comparacion: Comparacion,
-            consolidacion: Consolidacion,
-            direccion: this.state.data.solicitud.direccion,
-            superficie_total: this.state.data.solicitud.metros_cuadrados,
-            departamento: this.state.data.solicitud.n_depto,
-            agendamiento:  id
+            direccion: this.state.data.solicitud ? this.state.data.solicitud.direccion : "",
         }) 
 
     }
+    
     renderProm(){
         let prom = 0
         let arrayLength = this.state.datos_referencia.length;
         this.state.datos_referencia.forEach(element => {
-            let precioSinPuntos = element.precio.replace("UF", "")
+            let precioSinPuntos = element[0].replace("UF", "")
             precioSinPuntos = precioSinPuntos.replace(/\./g, "")
             let PrecioFinal = parseInt(precioSinPuntos)
             //PrecioFinal = parseInt(PrecioFinal)
@@ -92,7 +76,6 @@ class Ficha extends Component{
 
         });
         let promedio = parseInt(prom / arrayLength)
-        console.log(prom, arrayLength, promedio)
         promedio = promedio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
         return promedio
     }
@@ -105,6 +88,11 @@ class Ficha extends Component{
         await this.setState({
             datos_referencia: arr
         })
+        let params = {
+            "datos_de_referencia": arr
+        }
+        let updateJson = await requestData.update('agendamientos/' + this.state.data.id, params)
+        console.log(updateJson, this.state.data)
     }
 
     renderURLImg(esto){
@@ -114,9 +102,8 @@ class Ficha extends Component{
     }
 
     goProperty(record){
-        let tipo = this.state.data.solicitud.tipo
         let base_dos = ""
-        let base_nombre = record.nombre.toLowerCase().replace("/"," ");
+        let base_nombre = record[2].toLowerCase().replace("/"," ");
         var arrayDeCadenas = base_nombre.split(" ");
         arrayDeCadenas.forEach(element => {
             element.replace("-","")
@@ -124,7 +111,7 @@ class Ficha extends Component{
                 base_dos = base_dos+"-"+element.replace("-","")
             }
         })
-        let base = "https://www.portalinmobiliario.com/venta/"+tipo+"/"+record.id+base_dos+"-uda"
+        let base = "https://www.portalinmobiliario.com/venta/"+this.state.type+"/"+record[3]+base_dos+"-uda"
         return base
     }
 
@@ -144,7 +131,7 @@ class Ficha extends Component{
                         <Row>
                             <Col md="12">
                                 <div className="common-box__sub animated fadeInRightBig">
-                                    <h6 className="text-center">Nombre:{this.state.data.solicitud.nombre}</h6>
+                                    <h6 className="text-center">Nombre:{this.state.data.solicitud ? this.state.data.solicitud.nombre : ""}</h6>
                                     <hr/>
                                 </div>
                             </Col>
@@ -160,7 +147,7 @@ class Ficha extends Component{
                                         key="imagen"
                                         render={(text, record, index) => (
                                             <span>
-                                                <img style={{maxHeight: "120px"}} src={this.renderURLImg(record.imagen)} alt={index} />
+                                                <img style={{maxHeight: "120px"}} src={this.renderURLImg(record[4])} alt={index} />
                                             </span>
                                         )}
                                     />
@@ -168,16 +155,31 @@ class Ficha extends Component{
                                     title="Nombre"
                                     dataIndex="nombre"
                                     key="nombre"
+                                    render={(text, record, index) => (
+                                        <span>
+                                            {record[3]}
+                                        </span>
+                                    )}
                                     />
                                     <Column
                                     title="Precio"
                                     dataIndex="precio"
                                     key="precio"
+                                    render={(text, record, index) => (
+                                        <span>
+                                            {record[0]}
+                                        </span>
+                                    )}
                                     />
                                     <Column
                                     title="Superficie"
                                     dataIndex="superficie"
                                     key="superficie"
+                                    render={(text, record, index) => (
+                                        <span>
+                                            {record[1]}
+                                        </span>
+                                    )}
                                     />
                                     <Column
                                         title="Acción"
