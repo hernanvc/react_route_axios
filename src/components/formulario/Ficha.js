@@ -47,7 +47,7 @@ class Ficha extends Component{
         let id = this.props.match.params.handle;
         let fetch = await requestData.getDetail('agendamientos?id=' +id)
         if(fetch){
-            console.log(fetch)
+            console.log(fetch.data, "fetch")
             let data = fetch.data[0]
             let datos_referencia = []
             datos_referencia = data.datos_de_referencia ? data.datos_de_referencia[data.datos_de_referencia.length - 1] : []
@@ -64,18 +64,14 @@ class Ficha extends Component{
     }
     
     renderProm(){
-        console.log('====================================')
-        console.log(this.state.datos_referencia)
-        console.log('====================================')
         let prom = 0
         let arrayLength = this.state.datos_referencia.length;
         let count = 0;
         let precio_metros_depurar = 0;
         let precio_diefinitivo =  "";
+        console.log(this.state.datos_referencia)
         this.state.datos_referencia.forEach(element => {
-            console.log('====================================')
-            console.log(element)
-            console.log('====================================')
+            console.log(element, "este es el item")
             let precioSinPuntos = element[0].replace("UF", "")
             precioSinPuntos = precioSinPuntos.replace(/\./g, "")
             let PrecioFinal = parseInt(precioSinPuntos)
@@ -87,12 +83,7 @@ class Ficha extends Component{
           
             if (arrray_metro.length <2){
                 metro = arrray_metro[0].replace(".", "").replace(",", ".")
-                console.log('====================================')
-                console.log(metro)
-                console.log('====================================')
             }else{
-                console.log(arrray_metro[1]);
-                console.log(arrray_metro[0])
                 let total = parseFloat(Math.round(arrray_metro[1].trim().replace(".", "").replace(",", ".")));
                 let construido = parseFloat(Math.round(arrray_metro[0].trim().replace(".", "").replace(",", ".")));
                 let terrasa = total - construido;
@@ -102,12 +93,6 @@ class Ficha extends Component{
                 let metro_propiedad = parseFloat(Math.round(PrecioFinal / metros));
                 precio_metros_depurar = precio_metros_depurar + metro_propiedad
                 count += 1
-                console.log('====================================')
-                console.log(total)
-                console.log('====================================')
-                console.log('====================================')
-                console.log(construido)
-                console.log('====================================')
                 
             }
             let factores = [1.2, 1.05, 1, 0.9, 0.8]
@@ -115,14 +100,8 @@ class Ficha extends Component{
             let terrasa_metros = this.state.data.solicitud.terraza/2;
             let pricio_final = pricio_metro_medio * parseFloat(Math.round(this.state.data.solicitud.metros_cuadrados + terrasa_metros));
             let pricio_final_d = (pricio_final * factores[this.state.data.solicitud.antiguedad]) * 0.95;
-            console.log('==================precio final==================')
-            console.log(pricio_final)
-            console.log(pricio_final_d)
-            
-            console.log('====================================')
            // prom = prom + PrecioFinal
             pricio_final_d = parseInt(pricio_final_d).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            console.log('====================================')
             precio_diefinitivo = pricio_final_d;
             console.log(pricio_final_d)
             return pricio_final_d
