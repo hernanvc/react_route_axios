@@ -93,39 +93,73 @@ class Ficha extends Component{
             }else{
                 console.log(arrray_metro[1]);
                 console.log(arrray_metro[0])
-                let total = parseFloat(Math.round(arrray_metro[1].trim().replace(".", "").replace(",", ".")));
-                let construido = parseFloat(Math.round(arrray_metro[0].trim().replace(".", "").replace(",", ".")));
-                let terrasa = total - construido;
-                let terrasa_monto = terrasa / 2;
-                let metros = construido + terrasa_monto;
+                console.log(this.state.data.solicitud.tipo)
+                if (this.state.data.solicitud.tipo == "departamento"){
+                    let total = parseFloat(Math.round(arrray_metro[1].trim().replace(".", "").replace(",", ".")));
+                    let construido = parseFloat(Math.round(arrray_metro[0].trim().replace(".", "").replace(",", ".")));
+                    let terrasa = total - construido;
+                    let terrasa_monto = terrasa / 2;
+                    let metros = construido + terrasa_monto;
+                    let metro_propiedad = parseFloat(Math.round(PrecioFinal / metros));
+                    precio_metros_depurar = precio_metros_depurar + metro_propiedad
+                    count += 1
+                    console.log('====================================')
+                    console.log(total)
+                    console.log('====================================')
+                    console.log('====================================')
+                    console.log(construido)
+                    console.log('====================================')
+                }else{
+                    let total = parseFloat(Math.round(arrray_metro[1].trim().replace(".", "").replace(",", ".")));
+                    let construido = parseFloat(Math.round(arrray_metro[0].trim().replace(".", "").replace(",", ".")));
+                    let terrasa = total ;
+                    let precio_counstruido = construido * 30
+                    let precio_terreno = precioSinPuntos - precio_counstruido
+                    let precio_metro_terreno = precio_terreno / terrasa
+                    precio_metros_depurar = precio_metros_depurar + precio_metro_terreno
+                    count += 1
+                    console.log('================precio_counstruido====================')
+                    console.log(precio_counstruido)
+                    console.log(precio_terreno)
+                    console.log(precio_metro_terreno)
+                    console.log('====================================')
+                }
                 
-                let metro_propiedad = parseFloat(Math.round(PrecioFinal / metros));
-                precio_metros_depurar = precio_metros_depurar + metro_propiedad
-                count += 1
-                console.log('====================================')
-                console.log(total)
-                console.log('====================================')
-                console.log('====================================')
-                console.log(construido)
-                console.log('====================================')
                 
             }
-            let factores = [1.2, 1.05, 1, 0.9, 0.8]
-            let pricio_metro_medio = precio_metros_depurar / count;
-            let terrasa_metros = this.state.data.solicitud.terraza/2;
-            let pricio_final = pricio_metro_medio * parseFloat(Math.round(this.state.data.solicitud.metros_cuadrados + terrasa_metros));
-            let pricio_final_d = (pricio_final * factores[this.state.data.solicitud.antiguedad]) * 0.95;
-            console.log('==================precio final==================')
-            console.log(pricio_final)
-            console.log(pricio_final_d)
+
+            if (this.state.data.solicitud.tipo == "departamento") {
+                let factores = [1.2, 1.05, 1, 0.9, 0.8]
+                let pricio_metro_medio = precio_metros_depurar / count;
+                let terrasa_metros = this.state.data.solicitud.terraza / 2;
+                let pricio_final = pricio_metro_medio * parseFloat(Math.round(this.state.data.solicitud.metros_cuadrados));
+                let pricio_final_d = (pricio_final * factores[this.state.data.solicitud.antiguedad]) * 0.95;
+                console.log('==================precio final==================')
+                console.log(pricio_final)
+                console.log(pricio_final_d)
+
+                console.log('====================================')
+                // prom = prom + PrecioFinal
+                pricio_final_d = parseInt(pricio_final_d).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                console.log('====================================')
+                precio_diefinitivo = pricio_final_d;
+                console.log(pricio_final_d)
+                return pricio_final_d
+            }else{
+                let factores = [1.2, 1.05, 1, 0.9, 0.8]
+                let pricio_metro_medio = precio_metros_depurar / count
+                let pricio_final = (pricio_metro_medio * parseFloat(Math.round(this.state.data.solicitud.terraza)) + (30 * parseFloat(Math.round(this.state.data.solicitud.metros_cuadrados))));
+                let pricio_final_d = (pricio_final * factores[this.state.data.solicitud.antiguedad]) * 0.97;
+                precio_diefinitivo = pricio_final_d;
+                console.log('====================================')
+                // prom = prom + PrecioFinal
+                pricio_final_d = parseInt(pricio_final_d).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                console.log('====================================')
+                precio_diefinitivo = pricio_final_d;
+                console.log(pricio_final_d)
+                return pricio_final_d
+            }
             
-            console.log('====================================')
-           // prom = prom + PrecioFinal
-            pricio_final_d = parseInt(pricio_final_d).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            console.log('====================================')
-            precio_diefinitivo = pricio_final_d;
-            console.log(pricio_final_d)
-            return pricio_final_d
 
         });
         let promedio = parseInt(prom / arrayLength)
