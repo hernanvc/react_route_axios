@@ -143,10 +143,12 @@ class Ficha extends Component{
                     console.log(construido)
                     console.log('====================================')
                     var excel = {
+                        id: element[3],
                         preciouf: precioSinPuntos,
                         construido: construido,
                         terrasa: terrasa,
                         nombre: element[2]
+                        
                     };
                     propiedades_excel.push(excel);
                 }else{
@@ -164,6 +166,7 @@ class Ficha extends Component{
                     console.log(precio_metro_terreno)
                     console.log('====================================')
                     var excel = {
+                        id: element[3],
                         preciouf: precioSinPuntos,
                         construido: construido,
                         total: total,
@@ -279,6 +282,7 @@ class Ficha extends Component{
                             
                             <ExcelFile element={<button>Descargar Excel</button>}>
                                 <ExcelSheet data={propiedades_excel} name="Employees">
+                                        <ExcelColumn label="Id" value="id" />
                                     <ExcelColumn label="Precio" value="preciouf" />
                                     <ExcelColumn label="Metros construido" value="construido" />
                                     <ExcelColumn label="Terrasa" value="terrasa" />
@@ -290,6 +294,7 @@ class Ficha extends Component{
                             :
                                 <ExcelFile element={<button>Descargar Excel</button>}>
                                     <ExcelSheet data={propiedades_excel} name="Employees">
+                                        <ExcelColumn label="Id" value="id" />
                                         <ExcelColumn label="Precio" value="preciouf" />
                                         <ExcelColumn label="Metros construido" value="construido" />
                                         <ExcelColumn label="Total" value="total" />
