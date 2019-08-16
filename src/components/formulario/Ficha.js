@@ -10,7 +10,43 @@ import {Row, Container, Col} from 'reactstrap';
 import {requestData} from '../services/request.service';
 import 'antd/dist/antd.css';
 import { Table} from 'antd';
+import ReactExport from "react-export-excel";
+
+
 const { Column, ColumnGroup } = Table;
+
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
+const dataSet1 = [
+    {
+        name: "Johson",
+        amount: 30000,
+        sex: 'M',
+        is_married: true
+    },
+    {
+        name: "Monika",
+        amount: 355000,
+        sex: 'F',
+        is_married: false
+    },
+    {
+        name: "John",
+        amount: 250000,
+        sex: 'M',
+        is_married: false
+    },
+    {
+        name: "Josef",
+        amount: 450500,
+        sex: 'M',
+        is_married: true
+    }
+];
+var propiedades_excel = [];
 
 class Ficha extends Component{
     constructor(props) {
@@ -64,6 +100,8 @@ class Ficha extends Component{
     }
     
     renderProm(){
+
+        propiedades_excel = [];
         console.log('====================================')
         console.log(this.state.datos_referencia)
         console.log('====================================')
@@ -109,6 +147,13 @@ class Ficha extends Component{
                     console.log('====================================')
                     console.log(construido)
                     console.log('====================================')
+                    var excel = {
+                        preciouf: precioSinPuntos,
+                        construido: construido,
+                        terrasa: terrasa,
+                        nombre: element[2]
+                    };
+                    propiedades_excel.push(excel);
                 }else{
                     let total = parseFloat(Math.round(arrray_metro[1].trim().replace(".", "").replace(",", ".")));
                     let construido = parseFloat(Math.round(arrray_metro[0].trim().replace(".", "").replace(",", ".")));
@@ -123,6 +168,13 @@ class Ficha extends Component{
                     console.log(precio_terreno)
                     console.log(precio_metro_terreno)
                     console.log('====================================')
+                    var excel = {
+                        preciouf: precioSinPuntos,
+                        construido: construido,
+                        total: total,
+                        nombre: element[2]
+                    };
+                    propiedades_excel.push(excel);
                 }
                 
                 
@@ -227,6 +279,31 @@ class Ficha extends Component{
                                     <hr/>
                                 </div>
                             </Col>
+                            
+                            {this.state.data.solicitud.tipo != 'casa' ?
+                            
+                            <ExcelFile element={<button>Descargar Excel</button>}>
+                                <ExcelSheet data={propiedades_excel} name="Employees">
+                                    <ExcelColumn label="Precio" value="preciouf" />
+                                    <ExcelColumn label="Metros construido" value="construido" />
+                                    <ExcelColumn label="Terrasa" value="terrasa" />
+                                    <ExcelColumn label="Nombre" value="nombre" />
+                                       
+                                </ExcelSheet>
+                               
+                            </ExcelFile>
+                            :
+                                <ExcelFile element={<button>Descargar Excel</button>}>
+                                    <ExcelSheet data={propiedades_excel} name="Employees">
+                                        <ExcelColumn label="Precio" value="preciouf" />
+                                        <ExcelColumn label="Metros construido" value="construido" />
+                                        <ExcelColumn label="Total" value="total" />
+                                        <ExcelColumn label="Nombre" value="nombre" />
+
+                                    </ExcelSheet>
+
+                                </ExcelFile>
+                            }
                         </Row>
                         <Row>
                             <Col lg="12">
