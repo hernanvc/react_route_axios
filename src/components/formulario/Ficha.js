@@ -83,7 +83,7 @@ class Ficha extends Component{
         let id = this.props.match.params.handle;
         let fetch = await requestData.getDetail('agendamientos?id=' +id)
         if(fetch){
-            console.log(fetch)
+            console.log(fetch.data, "fetch")
             let data = fetch.data[0]
             let datos_referencia = []
             datos_referencia = data.datos_de_referencia ? data.datos_de_referencia[data.datos_de_referencia.length - 1] : []
@@ -100,20 +100,22 @@ class Ficha extends Component{
     }
     
     renderProm(){
+<<<<<<< HEAD
 
         propiedades_excel = [];
         console.log('====================================')
         console.log(this.state.datos_referencia)
         console.log('====================================')
+=======
+>>>>>>> 070f0021fcdc17251bceeed265e5926d8c4f4a62
         let prom = 0
         let arrayLength = this.state.datos_referencia.length;
         let count = 0;
         let precio_metros_depurar = 0;
         let precio_diefinitivo =  "";
+        console.log(this.state.datos_referencia)
         this.state.datos_referencia.forEach(element => {
-            console.log('====================================')
-            console.log(element)
-            console.log('====================================')
+            console.log(element, "este es el item")
             let precioSinPuntos = element[0].replace("UF", "")
             precioSinPuntos = precioSinPuntos.replace(/\./g, "")
             let PrecioFinal = parseInt(precioSinPuntos)
@@ -125,9 +127,6 @@ class Ficha extends Component{
           
             if (arrray_metro.length <2){
                 metro = arrray_metro[0].replace(".", "").replace(",", ".")
-                console.log('====================================')
-                console.log(metro)
-                console.log('====================================')
             }else{
                 console.log(arrray_metro[1]);
                 console.log(arrray_metro[0])
