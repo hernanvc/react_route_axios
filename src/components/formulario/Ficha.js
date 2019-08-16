@@ -100,14 +100,10 @@ class Ficha extends Component{
     }
     
     renderProm(){
-<<<<<<< HEAD
-
         propiedades_excel = [];
         console.log('====================================')
         console.log(this.state.datos_referencia)
         console.log('====================================')
-=======
->>>>>>> 070f0021fcdc17251bceeed265e5926d8c4f4a62
         let prom = 0
         let arrayLength = this.state.datos_referencia.length;
         let count = 0;
